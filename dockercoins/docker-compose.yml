@@ -1,26 +1,43 @@
-version: "2"
+version: "3.1"
 
 services:
   rng:
-    build: rng
+    image: dennisn84/rpi-dockercoins_rng:1.0
+    networks:
+    - dockercoins
     ports:
     - "8001:80"
+    deploy:
+      mode: global
 
   hasher:
-    build: hasher
+    image: dennisn84/rpi-dockercoins_hasher:1.0
+    networks:
+    - dockercoins
     ports:
     - "8002:80"
 
   webui:
-    build: webui
+    image: dennisn84/rpi-dockercoins_webui:1.0
+    networks:
+    - dockercoins
     ports:
     - "8000:80"
-    volumes:
-    - "./webui/files/:/files/"
 
   redis:
     image: redis
+    networks:
+    - dockercoins
 
   worker:
-    build: worker
+    image: dennisn84/rpi-dockercoins_worker:1.0
+    networks:
+    - dockercoins
+    deploy:
+      replicas: 6
+      update_config:
+        parallelism: 3
+        # delay: 5s
 
+networks:
+    dockercoins:
