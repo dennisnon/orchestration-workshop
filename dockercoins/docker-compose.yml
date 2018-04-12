@@ -28,6 +28,10 @@ services:
     image: redis
     networks:
     - dockercoins
+    deploy:
+      placement:
+        constraint:
+          - node.role == manager
 
   worker:
     image: dennisn84/rpi-dockercoins_worker:1.0
@@ -38,6 +42,9 @@ services:
       update_config:
         parallelism: 3
         # delay: 5s
+      placement:
+        constraint:
+          - node.role == worker
 
 networks:
     dockercoins:
